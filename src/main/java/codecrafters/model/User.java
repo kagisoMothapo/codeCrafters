@@ -1,9 +1,12 @@
 package codecrafters.model;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
 
-
-
+@Table("users")
 public class User {
-    private int id;
+
+    @Id
+    private long id;
     private String username;
     private String email;
     private String firstName;
@@ -12,7 +15,7 @@ public class User {
     public User() {}
 
 
-    public User(int id, String username, String email, String firstName, String lastName) {
+    public User(long id, String username, String email, String firstName, String lastName) {
         this.id = id;
         this.username = username;
         this.email = email;
@@ -21,8 +24,8 @@ public class User {
     }
 
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public long getId() { return id; }
+    public void setId(long id) { this.id = id; }
 
     public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }

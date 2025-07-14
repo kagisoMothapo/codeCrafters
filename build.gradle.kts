@@ -22,6 +22,8 @@ dependencies {
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
+	implementation("mysql:mysql-connector-java:8.0.33")
 }
 
 tasks.withType<Test> {

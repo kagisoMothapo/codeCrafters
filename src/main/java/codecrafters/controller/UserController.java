@@ -5,7 +5,7 @@ import codecrafters.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -15,12 +15,12 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public List<User> getAllUsers() {
+    public Iterable<User> getAllUsers() {
         return userService.getAllUsers();
     }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable int id) {
+    public Optional<User> getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
     }
 
@@ -30,17 +30,12 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@PathVariable int id, @RequestBody User user) {
+    public Optional<User> updateUser(@PathVariable Long id, @RequestBody User user) {
         return userService.updateUser(id, user);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteUser(@PathVariable int id) {
-        boolean removed = userService.deleteUser(id);
-        if (removed) {
-            return "User is deleted successfully.";
-        } else {
-            return "User is not found.";
-        }
+    public void deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
     }
 }

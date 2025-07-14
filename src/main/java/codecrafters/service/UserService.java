@@ -1,57 +1,48 @@
 package codecrafters.service;
+
 import codecrafters.model.User;
+import codecrafters.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.List;
+
+import java.util.Optional;
 
 @Service
 public class UserService {
-    private List<User> users = new ArrayList<>();
-    private int currentId = 1;
 
-    public List<User> getAllUsers() {
-        return users;
+    @Autowired
+    private UserRepository userRepository;
+
+    public Iterable<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
-    public User getUserById(int id) {
-        for (int i = 0; i < users.size(); i++) {
-            User user = users.get(i);
-            if (user.getId() == id) {
-                return user;
-            }
-        }
-        return null;
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findById(id);
     }
 
     public User createUser(User user) {
-        user.setId(currentId);
-        currentId++;
-        users.add(user);
-        return user;
+        return userRepository.save(user);
     }
 
-    public User updateUser(int id, User updatedUser) {
-        for (int i = 0; i < users.size(); i++) {
-            User user = users.get(i);
-            if (user.getId() == id) {
-                user.setUsername(updatedUser.getUsername());
-                user.setEmail(updatedUser.getEmail());
-                user.setFirstName(updatedUser.getFirstName());
-                user.setLastName(updatedUser.getLastName());
-                return user;
-            }
+    public Optional<User> updateUser(Long id, User updatedUser) {
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            user.setUsername(updatedUser.getUsername());
+            user.setEmail(updatedUser.getEmail());
+            user.setFirstName(updatedUser.getFirstName());
+            user.setLastName(updatedUser.getLastName());
+
+            userRepository.save(user);
+            return Optional.of(user);
+        } else {
+            return Optional.empty();
         }
-        return null;
     }
 
-    public boolean deleteUser(int id) {
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getId() == id) {
-                users.remove(i);
-                return true;
-            }
-        }
-        return false;
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
     }
 }
-
